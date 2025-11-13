@@ -34,6 +34,21 @@
 
       <h1 class="title-main">UI-Styler</h1>
       <h2 class="title-sub">Ultrasound Image Style Transfer with <span class="hl1">Class-Aware Prompts</span> for Cross-Device Diagnosis Using a <span class="hl2">Frozen Black-Box Inference Network</span></h2>
+      
+      <!-- WACV 2026 Highlight -->
+      <div style="
+          text-align:center;
+          font-size:26px;                /* Larger text */
+          font-weight:900;               /* Extra bold */
+          color:#b91c1c;                 /* Red-700 */
+          background-color:#fee2e2;      /* Red-100 */
+          padding:12px 22px;             /* More padding */
+          border-radius:10px;
+          margin: -5px 0 -5px 0;         /* Closer to authors */
+          display:inline-block;
+      ">
+        — WACV 2026 —
+      </div>
 
       <div class="authors">
         <a href="https://scholar.google.com/citations?user=UUT7AlUAAAAJ" target="_blank" rel="noopener">Nhat-Tuong Do-Tran</a>,
@@ -94,7 +109,7 @@
     <section id="abstract" class="section">
       <div class="container">
         <h2>📝 Abstract</h2>
-        <p>The appearance of ultrasound images varies across acquisition devices, causing domain shifts that degrade the performance of fixed black-box downstream inference models when reused. To mitigate this issue, it is practical to develop unpaired image translation (UIT) methods that effectively align the statistical distributions between source and target domains, particularly under the constraint of a reused inference-blackbox setting. However, existing UIT approaches often overlook class-specific semantic alignment during domain adaptation, resulting in misaligned content-class mappings that can impair diagnostic accuracy. To address this limitation, we propose UI-Styler, a novel ultrasound-specific, class-aware image style transfer framework. UI-Styler leverages a pattern-matching mechanism to transfer texture patterns embedded in the target images onto source images while preserving the source structural content. In addition, we introduce a class-aware prompting strategy guided by pseudo labels of the target domain, which enforces accurate semantic alignment with diagnostic categories.</p>
+        <p>The appearance of ultrasound images varies across acquisition devices, causing domain shifts that degrade the performance of fixed black-box downstream inference models when reused. To mitigate this issue, it is practical to develop unpaired image translation (UIT) methods that effectively align the statistical distributions between source and target domains, particularly under the constraint of a reused <span style="font-weight:bold; text-decoration:underline;">inference-blackbox setting</span>. However, existing UIT approaches often overlook class-specific semantic alignment during domain adaptation, resulting in misaligned content-class mappings that can impair diagnostic accuracy. To address this limitation, we propose UI-Styler, a novel ultrasound-specific, class-aware image style transfer framework. UI-Styler leverages a pattern-matching mechanism to transfer texture patterns embedded in the target images onto source images while preserving the source structural content. In addition, we introduce a class-aware prompting strategy guided by pseudo labels of the target domain, which enforces accurate semantic alignment with diagnostic categories.</p>
 
         <div class="row">
           <div class="col-12">
@@ -139,7 +154,7 @@
                 <span style="color:#2563eb; font-weight:bold;">features or logits</span> 
                 for computing the loss function (i.e., prompt tuning in the black-box setting). 
                 <strong>In this work</strong>, we focus on the practical 
-                <span style="color:#16a34a; font-weight:bold;">inference-blackbox setting</span>, 
+                <span style="color:black; font-weight:bold; text-decoration:underline;">inference-blackbox setting</span>, 
                 where only predictions are available.
                 </p>
                 <img src="assets/img/settings.png" alt="Inference black-box setting"
@@ -157,7 +172,7 @@
                 
                 <p style="text-align:justify; text-justify:inter-word; font-size:18px; margin-left:30px; margin-right:30px; margin-bottom:-10px;">
                   <strong>Top-left:</strong> Overview of UI-Styler for ultrasound image translation under an 
-                  <span style="color:#22c55e; font-weight:bold;">inference-blackbox setting</span>. 
+                  <span style="color:black; font-weight:bold; text-decoration:underline;">inference-blackbox setting</span>. 
                   It performs <span style="color:#1d4ed8; font-weight:bold;">dual-level stylization</span> with a prompt set, 
                   while the <span style="color:#374151; font-weight:bold;">black-box</span> model remains frozen for 
                   <span style="color:#7c3aed; font-weight:bold;">final predictions</span>.
@@ -238,7 +253,7 @@
 
                 <p style="text-align:justify; text-justify:inter-word; font-size:16px; margin:10px 20px;">
                   <strong>Feature Space.</strong> We visualize the feature distributions using t-SNE 
-                  (<a href="https://lvdmaaten.github.io/tsne/" target="_blank" rel="noopener">t-SNE reference</a>) 
+                  (<a href="https://www.jmlr.org/papers/v9/vandermaaten08a.html" target="_blank" rel="noopener">Maaten, L. V. D., and Hinton, G</a>) 
                   on the UDIAT→UCLM task. Each point represents a sample: 
                   <span style="color:forestgreen; font-weight:bold;">green</span> for benign and 
                   <span style="color:red; font-weight:bold;">red</span> for malignant. 
