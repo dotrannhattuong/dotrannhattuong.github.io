@@ -200,8 +200,19 @@ h2,h3,h4 { margin-top:12px; margin-bottom:6px; margin-left:10px }
 .section h2 { margin:4px 0 6px }
 .section .card h3 { margin:2px 0 6px }
 
-.hl1 { color:#b45309; font-weight:inherit; background:none }
-.hl2 { color:#7c3aed; font-weight:inherit; background:none }
+.hl1 {
+  color: #D95F18;     /* Tucson Sunset Orange */
+  font-weight: inherit;
+  background: none;
+}
+
+.hl2 {
+  color: #D95F18;     /* Tucson Sunset Orange */
+  font-weight: inherit;
+  background: none;
+}
+
+/* 7c3aed */
 
 .title-main {
   text-align:center;
