@@ -16,6 +16,7 @@
             --link-color: #3b82f6; 
             --card-bg: #ffffff;
             --border-color: #e5e7eb;
+            --equal-contrib-color: #ef4444; /* Màu đỏ cho dấu sao */
         }
 
         * {
@@ -236,22 +237,28 @@
         }
         
         .highlight-equal {
-            background-color: #eef2ff;
-            color: #4f46e5;
+            background-color: #fef2f2;
+            color: #dc2626;
             padding: 3px 8px;
             border-radius: 6px;
             font-weight: 500;
             font-size: 0.85rem;
+            border: 1px solid #fee2e2;
+        }
+
+        .equal-star {
+            color: var(--equal-contrib-color);
+            font-weight: 700;
         }
 
         .paper-card {
             display: flex;
             gap: 30px;
             margin-bottom: 30px;
-            align-items: flex-start;
         }
 
         .paper-img-wrapper {
+            position: relative;
             width: 240px;
             height: 150px;
             flex-shrink: 0;
@@ -267,7 +274,7 @@
             box-shadow: 0 2px 8px rgba(0,0,0,0.04);
         }
 
-        /* Conference Badge Style (Moved out of image to avoid overlapping) */
+        /* Conference Badge Style */
         .conf-badge {
             display: inline-block;
             color: #ffffff;
@@ -535,7 +542,7 @@
                         <span class="conf-badge badge-wacv">WACV '26</span>UI-Styler: Ultrasound Image Style Transfer with Class-Aware Prompts for Cross-Device Diagnosis Using a Frozen Black-Box Inference Network
                     </div>
                     <div class="paper-authors">
-                        <strong>Do Tran Nhat Tuong</strong>, Ngoc-Hoang-Lam Le, Ching-Chun Huang
+                        <strong>Nhat-Tuong Do-Tran</strong>, Ngoc-Hoang-Lam Le, Ching-Chun Huang
                     </div>
                     <div class="paper-venue">Winter Conference on Applications of Computer Vision (WACV)</div>
                     <div class="paper-links">
@@ -557,7 +564,7 @@
                         <span class="conf-badge badge-aaai">AAAI '25</span>HiGDA: Hierarchical Graph of Nodes to Learn Local-to-Global Topology for Semi-Supervised Domain Adaptation
                     </div>
                     <div class="paper-authors">
-                        Ba Hung Ngo, Doanh C. Bui, <strong>Do Tran Nhat Tuong</strong>, Tae Jong Choi
+                        Ba Hung Ngo<span class="equal-star">*</span>, Doanh C. Bui<span class="equal-star">*</span>, <strong>Nhat-Tuong Do-Tran</strong>, Tae Jong Choi
                     </div>
                     <div class="paper-venue">AAAI Conference on Artificial Intelligence (AAAI)</div>
                     <div class="paper-links">
@@ -578,7 +585,7 @@
                         <span class="conf-badge badge-cvpr">CVPR '24</span>Learning CNN on ViT: A Hybrid Model to Explicitly Class-specific Boundaries for Domain Adaptation
                     </div>
                     <div class="paper-authors">
-                        Ba Hung Ngo*, <strong>Do Tran Nhat Tuong*</strong>, Tuan-Ngoc Nguyen, Hae-Gon Jeon, Tae Jong Choi
+                        Ba Hung Ngo<span class="equal-star">*</span>, <strong>Nhat-Tuong Do-Tran<span class="equal-star">*</span></strong>, Tuan-Ngoc Nguyen, Hae-Gon Jeon, Tae Jong Choi
                     </div>
                     <div class="paper-venue">Conference on Computer Vision and Pattern Recognition (CVPR)</div>
                     <div class="paper-links">
