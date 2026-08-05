@@ -1,325 +1,662 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tuong | Personal Page</title>
+    <!-- Google Fonts: Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --bg-color: #fafafa;
+            --text-main: #222222;
+            --text-muted: #666666;
+            --link-color: #3b82f6; 
+            --card-bg: #ffffff;
+            --border-color: #e5e7eb;
+        }
 
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
-<HTML>
- <HEAD>
-  <TITLE> Heart </TITLE>
-  <META NAME="Generator" CONTENT="EditPlus">
-  <META NAME="Author" CONTENT="">
-  <META NAME="Keywords" CONTENT="">
-  <META NAME="Description" CONTENT="">
- 
-    
-  <style>
-  html, body {
-  height: 100%;
-  padding: 0;
-  margin: 0;
-  background: #000;
-  display: flex;
-	justify-content: center;
-	align-items: center;
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
 
-}
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            line-height: 1.7;
+            -webkit-font-smoothing: antialiased;
+        }
 
-.box {
-	width: 100%;
-	position: absolute;
-	top: 50%;
-	left: 50%;
-	transform: translate(-50%, -50%);
-	display: flex;
-	flex-direction: column;
-}
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 60px 20px;
+        }
 
-canvas {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-}
-#pinkboard {
-	position: relative;
-	margin: auto;
-	height: 500px;
-	width: 500px;
-	animation: animate 1.3s infinite;
-}
+        a {
+            color: var(--link-color);
+            text-decoration: none;
+            font-weight: 400;
+            transition: color 0.2s ease, text-decoration 0.2s ease;
+        }
 
-#pinkboard:before, #pinkboard:after {
-	content: '';
-	position: absolute;
-	background: #FF5CA4;
-	width: 100px;
-	height: 160px;
-	border-top-left-radius: 50px;
-	border-top-right-radius: 50px;
-}
+        a:hover {
+            text-decoration: underline;
+        }
 
-#pinkboard:before {
-	left: 100px;
-	transform: rotate(-45deg);
-	transform-origin: 0 100%;
-	box-shadow: 0 14px 28px rgba(0,0,0,0.25),
-							0 10px 10px rgba(0,0,0,0.22);
-}
+        /* Profile Section Styles */
+        .profile-section {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 50px;
+        }
 
-#pinkboard:after {
-	left: 0;
-	transform: rotate(45deg);
-	transform-origin: 100% 100%;
-}
+        .profile-img {
+            width: 250px; 
+            height: 250px; 
+            object-fit: cover;
+            border-radius: 8px; 
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+            flex-shrink: 0;
+        }
 
-@keyframes animate {
-	0% {
-		transform: scale(1);
-	}
-	30% {
-		transform: scale(.8);
-	}
-	60% {
-		transform: scale(1.2);
-	}
-	100% {
-		transform: scale(1);
-	}
-}
-  </style>
- </HEAD>
- 
- <BODY>
-   <div class="box">
-      <canvas id="pinkboard"></canvas>
-   </div>
-  <script>
-  /*
- * Settings
- */
-var settings = {
-  particles: {
-    length:   2000, // maximum amount of particles
-    duration:   2, // particle duration in sec
-    velocity: 100, // particle velocity in pixels/sec
-    effect: -1.3, // play with this for a nice effect
-    size:      13, // particle size in pixels
-  },
-};
-/*
- * RequestAnimationFrame polyfill by Erik Möller
- */
-(function(){var b=0;var c=["ms","moz","webkit","o"];for(var a=0;a<c.length&&!window.requestAnimationFrame;++a){window.requestAnimationFrame=window[c[a]+"RequestAnimationFrame"];window.cancelAnimationFrame=window[c[a]+"CancelAnimationFrame"]||window[c[a]+"CancelRequestAnimationFrame"]}if(!window.requestAnimationFrame){window.requestAnimationFrame=function(h,e){var d=new Date().getTime();var f=Math.max(0,16-(d-b));var g=window.setTimeout(function(){h(d+f)},f);b=d+f;return g}}if(!window.cancelAnimationFrame){window.cancelAnimationFrame=function(d){clearTimeout(d)}}}());
-/*
- * Point class
- */
-var Point = (function() {
-  function Point(x, y) {
-    this.x = (typeof x !== 'undefined') ? x : 0;
-    this.y = (typeof y !== 'undefined') ? y : 0;
-  }
-  Point.prototype.clone = function() {
-    return new Point(this.x, this.y);
-  };
-  Point.prototype.length = function(length) {
-    if (typeof length == 'undefined')
-      return Math.sqrt(this.x * this.x + this.y * this.y);
-    this.normalize();
-    this.x *= length;
-    this.y *= length;
-    return this;
-  };
-  Point.prototype.normalize = function() {
-    var length = this.length();
-    this.x /= length;
-    this.y /= length;
-    return this;
-  };
-  return Point;
-})();
-/*
- * Particle class
- */
-var Particle = (function() {
-  function Particle() {
-    this.position = new Point();
-    this.velocity = new Point();
-    this.acceleration = new Point();
-    this.age = 0;
-  }
-  Particle.prototype.initialize = function(x, y, dx, dy) {
-    this.position.x = x;
-    this.position.y = y;
-    this.velocity.x = dx;
-    this.velocity.y = dy;
-    this.acceleration.x = dx * settings.particles.effect;
-    this.acceleration.y = dy * settings.particles.effect;
-    this.age = 0;
-  };
-  Particle.prototype.update = function(deltaTime) {
-    this.position.x += this.velocity.x * deltaTime;
-    this.position.y += this.velocity.y * deltaTime;
-    this.velocity.x += this.acceleration.x * deltaTime;
-    this.velocity.y += this.acceleration.y * deltaTime;
-    this.age += deltaTime;
-  };
-  Particle.prototype.draw = function(context, image) {
-    function ease(t) {
-      return (--t) * t * t + 1;
-    }
-    var size = image.width * ease(this.age / settings.particles.duration);
-    context.globalAlpha = 1 - this.age / settings.particles.duration;
-    context.drawImage(image, this.position.x - size / 2, this.position.y - size / 2, size, size);
-  };
-  return Particle;
-})();
-/*
- * ParticlePool class
- */
-var ParticlePool = (function() {
-  var particles,
-      firstActive = 0,
-      firstFree   = 0,
-      duration    = settings.particles.duration;
-  
-  function ParticlePool(length) {
-    // create and populate particle pool
-    particles = new Array(length);
-    for (var i = 0; i < particles.length; i++)
-      particles[i] = new Particle();
-  }
-  ParticlePool.prototype.add = function(x, y, dx, dy) {
-    particles[firstFree].initialize(x, y, dx, dy);
-    
-    // handle circular queue
-    firstFree++;
-    if (firstFree   == particles.length) firstFree   = 0;
-    if (firstActive == firstFree       ) firstActive++;
-    if (firstActive == particles.length) firstActive = 0;
-  };
-  ParticlePool.prototype.update = function(deltaTime) {
-    var i;
-    
-    // update active particles
-    if (firstActive < firstFree) {
-      for (i = firstActive; i < firstFree; i++)
-        particles[i].update(deltaTime);
-    }
-    if (firstFree < firstActive) {
-      for (i = firstActive; i < particles.length; i++)
-        particles[i].update(deltaTime);
-      for (i = 0; i < firstFree; i++)
-        particles[i].update(deltaTime);
-    }
-    
-    // remove inactive particles
-    while (particles[firstActive].age >= duration && firstActive != firstFree) {
-      firstActive++;
-      if (firstActive == particles.length) firstActive = 0;
-    }
-    
-    
-  };
-  ParticlePool.prototype.draw = function(context, image) {
-    // draw active particles
-    if (firstActive < firstFree) {
-      for (i = firstActive; i < firstFree; i++)
-        particles[i].draw(context, image);
-    }
-    if (firstFree < firstActive) {
-      for (i = firstActive; i < particles.length; i++)
-        particles[i].draw(context, image);
-      for (i = 0; i < firstFree; i++)
-        particles[i].draw(context, image);
-    }
-  };
-  return ParticlePool;
-})();
-/*
- * Putting it all together
- */
-(function(canvas) {
-  var context = canvas.getContext('2d'),
-      particles = new ParticlePool(settings.particles.length),
-      particleRate = settings.particles.length / settings.particles.duration, // particles/sec
-      time;
-  
-  // get point on heart with -PI <= t <= PI
-  function pointOnHeart(t) {
-    return new Point(
-      160 * Math.pow(Math.sin(t), 3),
-      130 * Math.cos(t) - 50 * Math.cos(2 * t) - 20 * Math.cos(3 * t) - 10 * Math.cos(4 * t) + 25
-    );
-  }
-  
-  // creating the particle image using a dummy canvas
-  var image = (function() {
-    var canvas  = document.createElement('canvas'),
-        context = canvas.getContext('2d');
-    canvas.width  = settings.particles.size;
-    canvas.height = settings.particles.size;
-    // helper function to create the path
-    function to(t) {
-      var point = pointOnHeart(t);
-      point.x = settings.particles.size / 2 + point.x * settings.particles.size / 350;
-      point.y = settings.particles.size / 2 - point.y * settings.particles.size / 350;
-      return point;
-    }
-    // create the path
-    context.beginPath();
-    var t = -Math.PI;
-    var point = to(t);
-    context.moveTo(point.x, point.y);
-    while (t < Math.PI) {
-      t += 0.01; // baby steps!
-      point = to(t);
-      context.lineTo(point.x, point.y);
-    }
-    context.closePath();
-    // create the fill
-    context.fillStyle = '#FF5CA4';
-    context.fill();
-    // create the image
-    var image = new Image();
-    image.src = canvas.toDataURL();
-    return image;
-  })();
-  
-  // render that thing!
-  function render() {
-    // next animation frame
-    requestAnimationFrame(render);
-    
-    // update time
-    var newTime   = new Date().getTime() / 1000,
-        deltaTime = newTime - (time || newTime);
-    time = newTime;
-    
-    // clear canvas
-    context.clearRect(0, 0, canvas.width, canvas.height);
-    
-    // create new particles
-    var amount = particleRate * deltaTime;
-    for (var i = 0; i < amount; i++) {
-      var pos = pointOnHeart(Math.PI - 2 * Math.PI * Math.random());
-      var dir = pos.clone().length(settings.particles.velocity);
-      particles.add(canvas.width / 2 + pos.x, canvas.height / 2 - pos.y, dir.x, -dir.y);
-    }
-    
-    // update and draw particles
-    particles.update(deltaTime);
-    particles.draw(context, image);
-  }
-  
-  // handle (re-)sizing of the canvas
-  function onResize() {
-    canvas.width  = canvas.clientWidth;
-    canvas.height = canvas.clientHeight;
-  }
-  window.onresize = onResize;
-  
-  // delay rendering bootstrap
-  setTimeout(function() {
-    onResize();
-    render();
-  }, 10);
-})(document.getElementById('pinkboard'));
-  </script>
- </BODY>
-</HTML>
+        .profile-info h1 {
+            font-size: 2.3rem;
+            font-weight: 700;
+            margin-bottom: 12px;
+            letter-spacing: -0.5px;
+        }
+
+        .profile-info p {
+            font-size: 1.05rem;
+            color: var(--text-main);
+            margin-bottom: 8px;
+        }
+        
+        /* Education Dropdown Styles */
+        .edu-details {
+            margin-bottom: 10px;
+        }
+        
+        .edu-details summary {
+            font-size: 1.05rem;
+            color: var(--text-muted);
+            cursor: pointer;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            user-select: none;
+            transition: color 0.2s ease;
+        }
+        
+        .edu-details summary:hover {
+            color: var(--link-color);
+        }
+
+        .edu-details-content {
+            padding-left: 15px;
+            border-left: 2px solid var(--border-color);
+            margin-top: 8px;
+            margin-bottom: 15px;
+            animation: fadeIn 0.3s ease;
+        }
+        
+        .edu-details-content p {
+            font-size: 0.95rem;
+            margin-bottom: 5px;
+        }
+        
+        .edu-details-content p:last-child {
+            margin-bottom: 0;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Social Links & CV Button Styles */
+        .social-links {
+            display: flex;
+            gap: 8px; 
+            margin-top: 15px;
+            flex-wrap: wrap; 
+        }
+
+        .social-links a, .social-links button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 5px 12px; 
+            border-radius: 20px;
+            background-color: var(--card-bg);
+            color: var(--text-main);
+            border: 1px solid var(--border-color);
+            font-size: 0.85rem; 
+            font-family: inherit;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            gap: 6px; 
+        }
+
+        .social-links a:hover, .social-links button:hover {
+            background-color: var(--text-main);
+            color: white;
+            text-decoration: none;
+            border-color: var(--text-main);
+            transform: translateY(-2px);
+        }
+
+        /* General Section Styles */
+        section {
+            margin-bottom: 50px;
+        }
+
+        .section-header-wrap {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 10px;
+            margin-bottom: 25px;
+        }
+
+        .section-title {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: var(--text-main);
+        }
+
+        /* News Section Styles */
+        .news-list {
+            list-style: none;
+        }
+
+        .news-item {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 12px;
+            font-size: 0.95rem;
+            align-items: center;
+        }
+
+        .news-date {
+            font-weight: 600;
+            color: var(--text-main);
+            min-width: 90px;
+            flex-shrink: 0;
+        }
+
+        .edu-milestone-date {
+            background-color: #eff6ff;
+            color: var(--link-color) !important;
+            padding: 3px 10px;
+            border-radius: 6px;
+            border: 1px solid #bfdbfe;
+            text-align: center;
+            font-weight: 600;
+        }
+        
+        .hidden-news {
+            display: none;
+        }
+        
+        .toggle-news-btn {
+            background: none;
+            border: none;
+            color: var(--link-color);
+            cursor: pointer;
+            font-size: 0.95rem;
+            font-family: inherit;
+            padding: 0;
+            margin-top: 5px;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .toggle-news-btn:hover {
+            text-decoration: underline;
+        }
+
+        /* Publications Section Styles */
+        .section-notes {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .highlight-equal {
+            background-color: #eef2ff;
+            color: #4f46e5;
+            padding: 3px 8px;
+            border-radius: 6px;
+            font-weight: 500;
+            font-size: 0.85rem;
+        }
+
+        .paper-card {
+            display: flex;
+            gap: 30px;
+            margin-bottom: 30px;
+            align-items: flex-start;
+        }
+
+        .paper-img-wrapper {
+            width: 240px;
+            height: 150px;
+            flex-shrink: 0;
+        }
+
+        .paper-img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            background-color: #ffffff;
+            border-radius: 6px;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+        }
+
+        /* Conference Badge Style (Moved out of image to avoid overlapping) */
+        .conf-badge {
+            display: inline-block;
+            color: #ffffff;
+            font-size: 0.75rem;
+            font-weight: 600;
+            padding: 2px 8px;
+            border-radius: 4px;
+            letter-spacing: 0.5px;
+            margin-right: 8px;
+            vertical-align: middle;
+        }
+        
+        .badge-wacv { background-color: #3b82f6; } 
+        .badge-aaai { background-color: #ef4444; } 
+        .badge-cvpr { background-color: #8b5cf6; } 
+
+        .paper-content {
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+        }
+
+        .paper-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-main);
+            margin-bottom: 5px;
+            line-height: 1.4;
+        }
+
+        .paper-authors {
+            font-size: 0.95rem;
+            color: var(--text-main);
+            margin-bottom: 5px;
+        }
+
+        .paper-venue {
+            font-size: 0.9rem;
+            font-style: italic;
+            color: var(--text-muted);
+            margin-bottom: 10px;
+        }
+
+        .paper-links {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .paper-links a {
+            font-size: 0.85rem;
+            color: var(--text-main);
+            border: 1px solid var(--border-color);
+            padding: 3px 10px;
+            border-radius: 4px;
+            background: var(--card-bg);
+            text-decoration: none;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .paper-links a:hover {
+            background: var(--text-main);
+            color: white;
+            border-color: var(--text-main);
+        }
+
+        /* Bullet List Styles for Services & Awards */
+        .bullet-list {
+            list-style-type: disc;
+            padding-left: 20px;
+            color: var(--text-main);
+        }
+        
+        .bullet-list li {
+            margin-bottom: 8px;
+            font-size: 0.95rem;
+        }
+
+        /* WeChat QR Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(4px);
+        }
+
+        .modal-content {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+            position: relative;
+            max-width: 300px;
+        }
+
+        .modal-content img {
+            max-width: 100%;
+            border-radius: 8px;
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            font-size: 24px;
+            cursor: pointer;
+            color: #888;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .profile-section {
+                flex-direction: column;
+                text-align: center;
+            }
+            .social-links {
+                justify-content: center;
+            }
+            .section-header-wrap {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 5px;
+            }
+            .paper-card {
+                flex-direction: column;
+                gap: 15px;
+            }
+            .paper-img-wrapper {
+                width: 100%;
+                height: auto;
+                max-width: 300px;
+                margin: 0 auto;
+            }
+            .paper-img {
+                height: auto;
+                aspect-ratio: 1.6;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <!-- Profile Section -->
+        <section class="profile-section">
+            <img src="images/profile.PNG" alt="Do Tran Nhat Tuong" class="profile-img">
+            <div class="profile-info">
+                <h1>Do Tran Nhat Tuong</h1>
+                <p>I am a Ph.D. Student in Computer Science at <a href="https://www.comp.nus.edu.sg/" target="_blank">National University of Singapore (NUS)</a>, working with <a href="https://www.comp.nus.edu.sg/~leegh/" target="_blank">Prof. Lee Gim Hee</a>.</p>
+                
+                <!-- Collapsible Education Details -->
+                <details class="edu-details">
+                    <summary>📖 View Previous Education</summary>
+                    <div class="edu-details-content">
+                        <p>Previously, received Master in Computer Science (Feb 2024 - Jul 2025) from <a href="https://eecsigp.nycu.edu.tw/" target="_blank">National Yang Ming Chiao Tung University (NYCU)</a>, advised by <a href="https://nycu-acm.github.io/ACM_NYCU_website/" target="_blank">Prof. Ching-Chun Huang</a>.</p>
+                        <p>Before that, obtained Bachelor's degree at <a href="https://en.hcmute.edu.vn/" target="_blank">Ho Chi Minh City University of Technology and Education (HCMUTE)</a>, advised by Trung-Hieu Nguyen and <a href="https://scholar.google.com/citations?user=qJ7mWjoAAAAJ" target="_blank">Vu-Hoang Tran</a>.</p>
+                    </div>
+                </details>
+                
+                <p><strong>Research interests:</strong> Embodied AI, Robot Manipulation, Domain Adaptation.</p>
+                
+                <!-- Social & Contact Links -->
+                <div class="social-links">
+                    <a href="mailto:tuongdotn@u.nus.edu"><i class="fas fa-envelope"></i> Email</a>
+                    <a href="https://scholar.google.com/citations?user=UUT7AlUAAAAJ" target="_blank"><i class="fas fa-graduation-cap"></i> Scholar</a>
+                    <a href="https://github.com/dotrannhattuong" target="_blank"><i class="fab fa-github"></i> GitHub</a>
+                    <a href="https://www.linkedin.com/in/nhat-tuong-do-tran-631215251/" target="_blank"><i class="fab fa-linkedin-in"></i> LinkedIn</a>
+                    <a href="https://www.facebook.com/tuong.do.735" target="_blank"><i class="fab fa-facebook-f"></i> Facebook</a>
+                    <button onclick="openModal()"><i class="fab fa-weixin"></i> WeChat</button>
+                    <a href="https://drive.google.com/file/d/1Uxs-_uDzwR2gE0jSJwXXfY9FnVo6SeeQ/view?usp=sharing" target="_blank"><i class="fas fa-file-pdf"></i> CV</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- News Section -->
+        <section>
+            <div class="section-header-wrap">
+                <h2 class="section-title">🔥 News</h2>
+            </div>
+            <ul class="news-list">
+                <!-- Highlighted Educational & Professional Milestones -->
+                <li class="news-item">
+                    <div class="news-date edu-milestone-date">Aug 2026</div>
+                    <div>Started <strong>Ph.D.</strong> in Computer Science at National University of Singapore (NUS)!</div>
+                </li>
+                <li class="news-item">
+                    <div class="news-date">Jul 2026</div>
+                    <div>⭐ Honored to serve as a Reviewer for <em>NeurIPS 2026</em>.</div>
+                </li>
+                <li class="news-item">
+                    <div class="news-date">Nov 2025</div>
+                    <div>🎉 Papers <a href="https://dotrannhattuong.github.io/UIStyler/" target="_blank">UI-Styler</a> and <a href="https://arxiv.org/abs/2511.22064" target="_blank">DNA</a> accepted to <em>WACV 2026</em>.</div>
+                </li>
+                <li class="news-item">
+                    <div class="news-date">Aug 2025</div>
+                    <div>Paper <a href="https://arxiv.org/abs/2509.00508" target="_blank">TRUST</a> accepted to <em>APSIPA ASC 2025</em>.</div>
+                </li>
+                
+                <!-- Hidden Older News -->
+                <li class="news-item hidden-news">
+                    <div class="news-date edu-milestone-date">Jul 2025</div>
+                    <div>Completed <strong>Master</strong> in Computer Science at National Yang Ming Chiao Tung University (NYCU).</div>
+                </li>
+                <li class="news-item hidden-news">
+                    <div class="news-date">Dec 2024</div>
+                    <div>Paper <a href="https://arxiv.org/pdf/2412.11819" target="_blank">HiGDA</a> accepted to <em>AAAI 2025</em>.</div>
+                </li>
+                <li class="news-item hidden-news">
+                    <div class="news-date">Sep 2024</div>
+                    <div>Paper <a href="https://openaccess.thecvf.com/content/ACCV2024/papers/Tai_DA2_Degree-Accumulated_Data_Augmentation_on_Point_Clouds_with_Curriculum_Dynamic_ACCV_2024_paper.pdf" target="_blank">DA^2</a> accepted to <em>ACCV 2024</em>.</div>
+                </li>
+                <li class="news-item hidden-news">
+                    <div class="news-date">Jun 2024</div>
+                    <div>Paper "Improving Video Retrieval Systems Using Multimodal Fusion and Re-Ranking Algorithm" accepted to <em>GTSD 2024</em>.</div>
+                </li>
+                <li class="news-item hidden-news">
+                    <div class="news-date edu-milestone-date">Feb 2024</div>
+                    <div>Started <strong>Master</strong> in Computer Science at National Yang Ming Chiao Tung University (NYCU).</div>
+                </li>
+                <li class="news-item hidden-news">
+                    <div class="news-date">Feb 2024</div>
+                    <div>Paper <a href="https://dotrannhattuong.github.io/ECB/website/" target="_blank">ECB</a> accepted to <em>CVPR 2024</em>.</div>
+                </li>
+                <li class="news-item hidden-news">
+                    <div class="news-date">Jan 2024</div>
+                    <div>Paper "Indirect: invertible and discrete noisy image rescaling with enhancement from case-dependent textures" accepted to <em>Multimedia Systems</em>.</div>
+                </li>
+                <li class="news-item hidden-news">
+                    <div class="news-date">May 2023</div>
+                    <div>Paper "Efficient Video Retrieval Method Based on Transition Detection and Video Metadata Information" accepted to <em>ICSSE 2023</em>.</div>
+                </li>
+                <li class="news-item hidden-news">
+                    <div class="news-date">Apr 2023</div>
+                    <div>Paper "Comprehensive Visual Features and Pseudo Labeling for Robust Natural Language-Based Vehicle Retrieval" accepted to CVPR Workshop 2023 (AI CITY CHALLENGE).</div>
+                </li>
+            </ul>
+            <button id="toggleNewsBtn" class="toggle-news-btn" onclick="toggleNews()">
+                Show more <i class="fas fa-chevron-down" style="font-size: 0.8rem;"></i>
+            </button>
+        </section>
+
+        <!-- Selected Publications Section -->
+        <section>
+            <div class="section-header-wrap">
+                <h2 class="section-title">📚 Selected Publications</h2>
+                <div class="section-notes">
+                    <span class="highlight-equal">* Equal contribution</span> <span>|</span> <a href="https://scholar.google.com/citations?user=UUT7AlUAAAAJ" target="_blank">Full list</a>
+                </div>
+            </div>
+
+            <!-- Publication 1: UI-Styler -->
+            <div class="paper-card">
+                <div class="paper-img-wrapper">
+                    <img src="images/UI-Styler.png" alt="UI-Styler" class="paper-img">
+                </div>
+                <div class="paper-content">
+                    <div class="paper-title">
+                        <span class="conf-badge badge-wacv">WACV '26</span>UI-Styler: Ultrasound Image Style Transfer with Class-Aware Prompts for Cross-Device Diagnosis Using a Frozen Black-Box Inference Network
+                    </div>
+                    <div class="paper-authors">
+                        <strong>Do Tran Nhat Tuong</strong>, Ngoc-Hoang-Lam Le, Ching-Chun Huang
+                    </div>
+                    <div class="paper-venue">Winter Conference on Applications of Computer Vision (WACV)</div>
+                    <div class="paper-links">
+                        <a href="https://arxiv.org/pdf/2511.17155" target="_blank"><i class="fas fa-file-pdf"></i> Paper</a>
+                        <a href="https://dotrannhattuong.github.io/UIStyler/" target="_blank"><i class="fas fa-globe"></i> Project Page</a>
+                        <a href="https://github.com/nycu-acm/UIStyler" target="_blank"><i class="fab fa-github"></i> Code</a>
+                        <a href="https://wacv.thecvf.com/media/PosterPDFs/WACV%202026/576.png?t=1771572590.8286595" target="_blank"><i class="fas fa-image"></i> Poster</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Publication 2: HiGDA -->
+            <div class="paper-card">
+                <div class="paper-img-wrapper">
+                    <img src="images/HiGDA.png" alt="HiGDA" class="paper-img">
+                </div>
+                <div class="paper-content">
+                    <div class="paper-title">
+                        <span class="conf-badge badge-aaai">AAAI '25</span>HiGDA: Hierarchical Graph of Nodes to Learn Local-to-Global Topology for Semi-Supervised Domain Adaptation
+                    </div>
+                    <div class="paper-authors">
+                        Ba Hung Ngo, Doanh C. Bui, <strong>Do Tran Nhat Tuong</strong>, Tae Jong Choi
+                    </div>
+                    <div class="paper-venue">AAAI Conference on Artificial Intelligence (AAAI)</div>
+                    <div class="paper-links">
+                        <a href="https://arxiv.org/pdf/2412.11819" target="_blank"><i class="fas fa-file-pdf"></i> Paper</a>
+                        <a href="https://underline.io/lecture/110811-higda-hierarchical-graph-of-nodes-to-learn-local-to-global-topology-for-semi-supervised-domain-adaptation" target="_blank"><i class="fas fa-globe"></i> Project Page</a>
+                        <a href="https://underline.io/lecture/110811-higda-hierarchical-graph-of-nodes-to-learn-local-to-global-topology-for-semi-supervised-domain-adaptation?posterExpanded=true" target="_blank"><i class="fas fa-image"></i> Poster</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Publication 3: Learning CNN on ViT -->
+            <div class="paper-card">
+                <div class="paper-img-wrapper">
+                    <img src="images/ECB.png" alt="Learning CNN on ViT" class="paper-img">
+                </div>
+                <div class="paper-content">
+                    <div class="paper-title">
+                        <span class="conf-badge badge-cvpr">CVPR '24</span>Learning CNN on ViT: A Hybrid Model to Explicitly Class-specific Boundaries for Domain Adaptation
+                    </div>
+                    <div class="paper-authors">
+                        Ba Hung Ngo*, <strong>Do Tran Nhat Tuong*</strong>, Tuan-Ngoc Nguyen, Hae-Gon Jeon, Tae Jong Choi
+                    </div>
+                    <div class="paper-venue">Conference on Computer Vision and Pattern Recognition (CVPR)</div>
+                    <div class="paper-links">
+                        <a href="https://arxiv.org/pdf/2403.18360" target="_blank"><i class="fas fa-file-pdf"></i> Paper</a>
+                        <a href="https://dotrannhattuong.github.io/ECB/website/" target="_blank"><i class="fas fa-globe"></i> Project Page</a>
+                        <a href="https://github.com/dotrannhattuong/ECB" target="_blank"><i class="fab fa-github"></i> Code</a>
+                        <a href="https://cvpr.thecvf.com/media/PosterPDFs/CVPR%202024/31056.png?t=1715258066.8693933" target="_blank"><i class="fas fa-image"></i> Poster</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Academic Services Section -->
+        <section>
+            <div class="section-header-wrap">
+                <h2 class="section-title">🤝 Academic Services</h2>
+            </div>
+            <ul class="bullet-list">
+                <li><strong>Reviewer:</strong> NeurIPS (2026)</li>
+            </ul>
+        </section>
+
+        <!-- Honors & Awards Section -->
+        <section>
+            <div class="section-header-wrap">
+                <h2 class="section-title">🏆 Honors & Awards</h2>
+            </div>
+            <ul class="bullet-list">
+                <li>MOE Chip-Driven Advanced IC Design Scholarship <i>(2025)</i></li>
+            </ul>
+        </section>
+
+    </div>
+
+    <!-- WeChat QR Modal Window -->
+    <div id="wechatModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeModal()">&times;</span>
+            <h3 style="margin-bottom: 15px; font-size: 1.1rem;">My WeChat</h3>
+            <img src="images/wechat_qr.JPG" alt="WeChat QR Code">
+        </div>
+    </div>
+
+    <!-- JavaScript for Modal and News Toggle -->
+    <script>
+        // Modal functionality for WeChat QR code
+        var modal = document.getElementById("wechatModal");
+        
+        function openModal() {
+            modal.style.display = "flex";
+        }
+        
+        function closeModal() {
+            modal.style.display = "none";
+        }
+        
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        }
+
+        // Toggle functionality for "Show more" / "Show less" news items
+        function toggleNews() {
+            var hiddenItems = document.querySelectorAll('.hidden-news');
+            var btn = document.getElementById('toggleNewsBtn');
+            var isHidden = hiddenItems[0].style.display === '' || hiddenItems[0].style.display === 'none';
+
+            hiddenItems.forEach(function(item) {
+                item.style.display = isHidden ? 'flex' : 'none';
+            });
+
+            if (isHidden) {
+                btn.innerHTML = 'Show less <i class="fas fa-chevron-up" style="font-size: 0.8rem;"></i>';
+            } else {
+                btn.innerHTML = 'Show more <i class="fas fa-chevron-down" style="font-size: 0.8rem;"></i>';
+            }
+        }
+    </script>
+</body>
+</html>
