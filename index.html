@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tuong | Personal Page</title>
-    <!-- Google Fonts: Inter -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Google Fonts: Manrope + Source Serif 4 -->
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&family=Source+Serif+4:opsz,wght@8..60,600;8..60,700&display=swap" rel="stylesheet">
     <!-- FontAwesome icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -26,7 +26,7 @@
         }
 
         body {
-            font-family: 'Inter', sans-serif;
+            font-family: 'Manrope', sans-serif;
             background-color: var(--bg-color);
             color: var(--text-main);
             line-height: 1.7;
@@ -34,7 +34,7 @@
         }
 
         .container {
-            max-width: 1000px;
+            max-width: 1050px;
             margin: 0 auto;
             padding: 60px 20px;
         }
@@ -59,25 +59,55 @@
         }
 
         .profile-img {
-            width: 250px; 
-            height: 250px; 
+            width: 280px; 
+            height: 280px; 
             object-fit: cover;
-            border-radius: 8px; 
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+            border: 1px solid rgba(59, 130, 246, 0.12);
+            border-radius: 14px;
+            box-shadow: 0 12px 32px rgba(15, 23, 42, 0.08);
             flex-shrink: 0;
         }
 
         .profile-info h1 {
-            font-size: 2.3rem;
+            font-family: 'Source Serif 4', serif;
+            font-size: 2.65rem;
             font-weight: 700;
-            margin-bottom: 12px;
-            letter-spacing: -0.5px;
+            line-height: 1.1;
+            margin-bottom: 18px;
+            letter-spacing: -0.7px;
+        }
+
+        .profile-info h1::after {
+            content: '';
+            display: block;
+            width: 48px;
+            height: 3px;
+            margin-top: 10px;
+            border-radius: 999px;
+            background: linear-gradient(90deg, #2563eb, #60a5fa);
         }
 
         .profile-info p {
             font-size: 1.05rem;
             color: var(--text-main);
             margin-bottom: 8px;
+        }
+
+        .profile-intro {
+            padding: 12px 15px;
+            margin-bottom: 14px !important;
+            border-left: 3px solid #3b82f6;
+            border-radius: 0 10px 10px 0;
+            background: linear-gradient(90deg, #eff6ff 0%, rgba(239, 246, 255, 0.25) 100%);
+        }
+
+        .profile-intro strong {
+            color: #1d4ed8;
+            font-weight: 700;
+        }
+
+        .profile-info a {
+            font-weight: 600;
         }
         
         /* Education Dropdown Styles */
@@ -86,19 +116,31 @@
         }
         
         .edu-details summary {
-            font-size: 1.05rem;
+            padding: 6px 10px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            background: var(--card-bg);
+            font-size: 0.9rem;
             color: var(--text-muted);
             cursor: pointer;
-            font-weight: 500;
+            font-weight: 600;
             display: inline-flex;
             align-items: center;
             gap: 5px;
             user-select: none;
-            transition: color 0.2s ease;
+            transition: color 0.2s ease, border-color 0.2s ease, background 0.2s ease;
         }
         
         .edu-details summary:hover {
             color: var(--link-color);
+            border-color: #bfdbfe;
+            background: #f8fbff;
+        }
+
+        .edu-details[open] summary {
+            color: #1d4ed8;
+            border-color: #bfdbfe;
+            background: #eff6ff;
         }
 
         .edu-details-content {
@@ -121,6 +163,34 @@
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(-5px); }
             to { opacity: 1; transform: translateY(0); }
+        }
+
+        .research-interests {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 7px;
+            margin-top: 4px;
+        }
+
+        .research-label {
+            color: var(--text-muted);
+            font-size: 0.82rem;
+            font-weight: 700;
+            letter-spacing: 0.03em;
+            margin-right: 2px;
+            text-transform: uppercase;
+        }
+
+        .research-tag {
+            padding: 5px 9px;
+            border: 1px solid #dbeafe;
+            border-radius: 999px;
+            background: #f8fbff;
+            color: #1e40af;
+            font-size: 0.8rem;
+            font-weight: 600;
+            line-height: 1.2;
         }
 
         /* Social Links & CV Button Styles */
@@ -170,8 +240,9 @@
         }
 
         .section-title {
+            font-family: 'Source Serif 4', serif;
             font-size: 1.4rem;
-            font-weight: 600;
+            font-weight: 700;
             color: var(--text-main);
         }
 
@@ -397,6 +468,19 @@
                 flex-direction: column;
                 text-align: center;
             }
+            .profile-info h1::after {
+                margin-left: auto;
+                margin-right: auto;
+            }
+            .profile-intro {
+                border-left: 0;
+                border-top: 3px solid #3b82f6;
+                border-radius: 10px;
+                text-align: left;
+            }
+            .research-interests {
+                justify-content: center;
+            }
             .social-links {
                 justify-content: center;
             }
@@ -430,18 +514,24 @@
             <img src="images/profile.PNG" alt="Do Tran Nhat Tuong" class="profile-img">
             <div class="profile-info">
                 <h1>Do Tran Nhat Tuong</h1>
-                <p>I am a <strong>Ph.D. Student</strong> in Computer Science at <a href="https://www.comp.nus.edu.sg/" target="_blank">National University of Singapore (NUS)</a>, working with <a href="https://www.comp.nus.edu.sg/~leegh/" target="_blank">Prof. Gim Hee Lee</a>.</p>
+                <p class="profile-intro">I am a <strong>Ph.D. Student</strong> in Computer Science at <a href="https://www.comp.nus.edu.sg/" target="_blank">National University of Singapore (NUS)</a>, working with <a href="https://www.comp.nus.edu.sg/~leegh/" target="_blank">Prof. Gim Hee Lee</a>.</p>
                 
                 <!-- Collapsible Education Details -->
                 <details class="edu-details">
                     <summary>📖 View Previous Education</summary>
                     <div class="edu-details-content">
                         <p>Previously, I received <strong>Master's</strong> degree in Computer Science at <a href="https://eecsigp.nycu.edu.tw/" target="_blank">National Yang Ming Chiao Tung University (NYCU)</a>, advised by <a href="https://nycu-acm.github.io/ACM_NYCU_website/" target="_blank">Prof. Ching-Chun Huang</a>.</p>
+                        <p>I have also been fortunate to build long-term collaborations with <a href="https://sites.google.com/site/hgjeoncv/" target="_blank">Prof. Hae-Gon Jeon</a>, <a href="https://dblp.org/pid/150/1657.html" target="_blank">Prof. Tae Jong Choi</a>, <a href="https://sites.google.com/view/bahungngo1991" target="_blank">Dr. Ba Hung Ngo</a>, and <a href="https://caodoanh2001.github.io/" target="_blank">Dr. Doanh C. Bui</a>.</p>
                         <p>Before that, I obtained <strong>Bachelor's</strong> degree at <a href="https://en.hcmute.edu.vn/" target="_blank">Ho Chi Minh City University of Technology and Education (HCMUTE)</a>, advised by <a href="mailto:hieuntr@hcmute.edu.vn">Trung-Hieu Nguyen</a> and <a href="https://scholar.google.com/citations?user=qJ7mWjoAAAAJ" target="_blank">Vu-Hoang Tran</a>.</p>
                     </div>
                 </details>
                 
-                <p><strong>Research interests:</strong> Embodied AI, Robot Manipulation, Domain Adaptation.</p>
+                <div class="research-interests" aria-label="Research interests">
+                    <span class="research-label">Research interests</span>
+                    <span class="research-tag">Embodied AI</span>
+                    <span class="research-tag">Robot Manipulation</span>
+                    <span class="research-tag">Domain Adaptation</span>
+                </div>
                 
                 <!-- Social & Contact Links -->
                 <div class="social-links">
@@ -473,7 +563,7 @@
                 </li>
                 <li class="news-item">
                     <div class="news-date">Nov 2025</div>
-                    <div>🎉 Papers <a href="https://dotrannhattuong.github.io/UIStyler/" target="_blank">UI-Styler</a> and <a href="https://arxiv.org/abs/2511.22064" target="_blank">DNA</a> accepted to <a href="https://wacv2026.thecvf.com/" target="_blank"><em>WACV 2026</em></a>.</div>
+                    <div>🎉 Two papers <a href="https://dotrannhattuong.github.io/UIStyler/" target="_blank">UI-Styler</a> and <a href="https://arxiv.org/abs/2511.22064" target="_blank">DNA</a> accepted to <a href="https://wacv2026.thecvf.com/" target="_blank"><em>WACV 2026</em></a>.</div>
                 </li>
                 <li class="news-item">
                     <div class="news-date">Aug 2025</div>
