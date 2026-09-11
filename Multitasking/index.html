@@ -1,0 +1,517 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Edge-Based Multi-Task Tri-Modal Perception</title>
+  <meta name="description" content="An Edge-Based Multi-Task System with Tri-Modal Perception for Autonomous Driving">
+  <meta property="og:title" content="An Edge-Based Multi-Task System with Tri-Modal Perception for Autonomous Driving">
+  <meta property="og:description" content="Multi-task camera perception + 2D LiDAR + CAN bus, deployed on a Jetson Nano and a real electric car.">
+  <meta property="og:image" content="images/overview.png">
+  <link rel="stylesheet" href="assets/css/styles.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+  <nav class="nav">
+    <div class="container nav-inner">
+      <div class="brand">Tri-Modal Perception</div>
+      <div class="links">
+        <a class="btn" href="#abstract">Abstract</a>
+        <a class="btn" href="#method">Method</a>
+        <a class="btn" href="#dataset">Dataset</a>
+        <a class="btn" href="#validation">Validation</a>
+        <a class="btn" href="#results">Results</a>
+        <a class="btn" href="#hardware">Hardware</a>
+        <!-- <a class="btn" href="#citation">Citation</a> -->
+      </div>
+    </div>
+  </nav>
+
+  <header class="hero">
+    <div class="container">
+      <div class="badge-row"><span class="badge">Autonomous Driving • Multi-Task Learning • Edge Computing • 2D LiDAR • CAN Bus</span></div>
+
+      <h1 class="title-main">An Edge-Based Multi-Task System with Tri-Modal Perception for Autonomous Driving</h1>
+
+      <!-- Authors -->
+      <div class="authors" style="font-size: 1.25em;">
+        <a href="https://scholar.google.com/citations?user=UUT7AlUAAAAJ" target="_blank" rel="noopener">Nhat-Tuong Do-Tran</a><sup>1</sup>,
+        Du Do<sup>2</sup>,
+        <a href="https://sites.google.com/view/bahungngo1991" target="_blank" rel="noopener">Ba Hung Ngo</a><sup>3</sup>,
+        <a href="https://scholar.google.com/citations?user=qJ7mWjoAAAAJ" target="_blank" rel="noopener">Vu-Hoang Tran</a><sup>4,&#9733;</sup>,
+        Trung-Hieu Nguyen<sup>4,&#9733;</sup>
+      </div>
+
+      <div class="affil-list">
+        <sup>1</sup>National University of Singapore, Singapore &nbsp;&middot;&nbsp;
+        <sup>2</sup>FPT University, Vietnam &nbsp;&middot;&nbsp;
+        <sup>3</sup>Thanh Dong University, Vietnam &nbsp;&middot;&nbsp;
+        <sup>4</sup>Ho Chi Minh City University of Technology and Engineering (HCMUTE), Vietnam
+        <br><span style="font-size:12.5px;">&#9733; denotes equal advising</span>
+      </div>
+
+      <div class="logo-row">
+        <img src="images/logos/nus.png" alt="National University of Singapore logo" style="height:60px; width:auto;">
+        <img src="images/logos/fpt.jpg" alt="FPT University logo" style="height:70px; width:auto;">
+        <img src="images/logos/thanhdong.png" alt="Thanh Dong University logo" style="height:60px; width:auto;">
+        <img src="images/logos/hcmute.png" alt="HCMUTE (Ho Chi Minh City University of Technology and Engineering) logo" style="height:70px; width:auto;">
+      </div>
+
+      <div class="cta-row">
+        <a class="btn primary" href="#" title="Link coming soon">
+          <i class="fa-solid fa-file-pdf" style="margin-right:6px;"></i> Paper
+        </a>
+        <a class="btn primary" href="https://github.com/dotrannhattuong/Multitasking-For-Autonomous" target="_blank" rel="noopener">
+          <i class="fa-brands fa-github" style="margin-right:6px;"></i> Code
+        </a>
+      </div>
+
+      <p style="max-width:820px; margin:14px auto 0; text-align:justify; text-justify:inter-word; font-size:16px; color:#374151;">
+        <strong>TL;DR:</strong> a shared multi-task network handles object detection, lane detection, and
+        driving-scene classification from a single camera; a 2D LiDAR and the CAN bus add obstacle distances and
+        vehicle state — all running concurrently in real time on one Jetson Nano, validated from simulation to a
+        real electric car.
+      </p>
+
+      <!-- Hero teaser video -->
+      <div class="hero-video-row">
+        <div class="hero-video">
+          <video autoplay loop muted playsinline controls poster="images/real_result.png">
+            <source src="videos/real.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+          </video>
+          <div class="cap-text">Real-world deployment: the complete tri-modal system running live on the Renault Twizy with an onboard Jetson Nano.</div>
+        </div>
+        <div class="hero-side-img">
+          <img src="images/twizy_campus.png" alt="Renault Twizy test vehicle parked at the HCMUTE Faculty of Vehicle and Energy Engineering">
+          <div class="cap-text">Field test site: the Renault Twizy test vehicle at the Faculty of Vehicle and Energy Engineering, HCMUTE.</div>
+        </div>
+      </div>
+
+      <div class="hero-fig fig">
+        <h3 style="text-align: center; font-size: 22px; font-weight: bold; margin-bottom: 10px;">
+          Tri-Modal Perception on the Edge
+        </h3>
+        <img src="images/overview.png"
+          alt="Overview of the tri-modal perception system: camera, 2D LiDAR, and CAN bus feeding four perception outputs"
+          style="margin-top:10px; max-width:85%; height:auto; display:block; margin-left:auto; margin-right:auto;">
+        <p class="caption" style="text-align:justify; text-justify:inter-word; margin:8px 20px 0;">
+          <strong>Left:</strong> the camera captures external-visual information, a SICK LMS511-PRO 2D LiDAR provides
+          obstacle-distance measurements, and the CAN bus provides internal-vehicle information. <strong>Center:</strong>
+          the multi-task visual network, LiDAR pipeline, and CAN bus pipeline process these streams concurrently on the
+          Jetson Nano. <strong>Right:</strong> the system outputs lane segmentation, driving-scene classification, object
+          detection complemented by LiDAR obstacle distances, and vehicle-state data.
+        </p>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <!-- ABSTRACT -->
+    <section id="abstract" class="section">
+      <div class="container">
+        <h2>📝 Abstract</h2>
+        <p>Real-time perception is essential for autonomous driving, yet deploying accurate deep learning models on resource-constrained edge devices remains challenging. Existing systems often employ separate single-task networks, which require substantial computational and memory resources. Moreover, vision-only perception can become unreliable under adverse illumination and weather conditions. This paper proposes an edge-based multi-task system that concurrently processes three complementary modalities: <strong>(1) external-visual perception</strong>, where a lightweight MobileNetV2 backbone with a BiFPN neck jointly performs object detection, lane detection, and driving-context classification; <strong>(2) spatial-environmental perception</strong>, where a 2D LiDAR provides obstacle-distance measurements to complement visual object detection; and <strong>(3) internal-vehicle perception</strong>, where the CAN bus provides real-time vehicle states such as speed and battery level. The multi-task visual model is validated in a Unity simulation and on a scale-model vehicle, then the complete tri-modal system is deployed on a real-world electric car (Renault Twizy) using an NVIDIA Jetson Nano. The multi-task visual network achieves <strong>88.1% mAP@0.5</strong> for object detection and <strong>95.0% IoU</strong> for lane detection at <strong>14.63 FPS</strong> using FP16 TensorRT inference, while the LiDAR and CAN bus pipelines run at approximately <strong>55 ms</strong> and <strong>2.3 ms</strong> per cycle.</p>
+
+        <div class="stat-row">
+          <div class="stat-pill"><div class="num">88.1%</div><div class="lbl">mAP@0.5 (object detection)</div></div>
+          <div class="stat-pill"><div class="num">95.0%</div><div class="lbl">IoU (lane detection)</div></div>
+          <div class="stat-pill"><div class="num">14.63 FPS</div><div class="lbl">Multi-task visual model, FP16 TensorRT</div></div>
+          <div class="stat-pill"><div class="num">~55 ms</div><div class="lbl">LiDAR pipeline / cycle</div></div>
+          <div class="stat-pill"><div class="num">~2.3 ms</div><div class="lbl">CAN bus pipeline / cycle</div></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- METHOD -->
+    <section id="method" class="section">
+      <div class="container">
+        <h2>📘 Method</h2>
+        <p class="figure-note" style="margin-left:0; margin-right:0;">
+          The system performs three complementary forms of perception concurrently on an NVIDIA Jetson Nano: an
+          <strong>external-visual</strong> branch from the camera, a <strong>spatial-environmental</strong> branch
+          from the 2D LiDAR, and an <strong>internal-vehicle</strong> branch from the CAN bus. The overview at the
+          top of this page shows how the three pipelines connect; each is detailed below.
+        </p>
+
+        <div class="row">
+          <div class="col-12">
+            <div class="fig">
+              <h3 style="margin-left:20px;">🏗️ External-Visual Perception</h3>
+              <p class="figure-note">
+                A shared <strong>MobileNetV2</strong> backbone extracts multi-scale features for <strong>BiFPN</strong>
+                fusion. The stride-4 feature supports object detection (instance level) and lane-point estimation
+                (structural level), whereas the stride-32 feature supports weather, road-scene, and time-of-day
+                classification (contextual level). Sharing this hierarchy across tasks eliminates repeated feature
+                extraction and keeps inference fast enough for real-time use on a Jetson Nano.
+              </p>
+              <img src="images/architecture.png" alt="Multi-task network architecture: MobileNetV2 backbone, BiFPN neck, and three task heads"
+                style="display:block; margin:0 auto; max-width:95%; height:auto;">
+            </div>
+          </div>
+
+          <div class="col-12">
+            <div class="fig">
+              <h3 style="margin-left:20px;">📡 Spatial-Environmental Perception</h3>
+              <p class="figure-note">
+                A SICK LMS511-PRO 2D LiDAR provides a 190° field of view at 50 Hz; the pipeline retains the forward
+                55°–125° sector (141 range samples per scan) and converts each polar return into Cartesian
+                coordinates. This path complements external-visual perception with metric obstacle distances
+                unavailable from a monocular camera. <strong>Left:</strong> camera view used for external-visual
+                perception. <strong>Right:</strong> the corresponding Cartesian LiDAR point set. No image–LiDAR
+                projection or point-to-object association is applied — the two outputs remain independent and
+                complementary. The full LiDAR pipeline runs at approximately <strong>55 ms</strong> per cycle
+                (~18 updates/s).
+              </p>
+              <img src="images/lidar_camera.png" alt="Side-by-side camera view and Cartesian LiDAR point cloud"
+                style="display:block; margin:0 auto; max-width:90%; height:auto;">
+            </div>
+          </div>
+
+          <div class="col-12">
+            <div class="card">
+              <h3 style="margin-left:10px;">🔧 Internal-Vehicle Perception</h3>
+              <p class="figure-note">
+                Renault Twizy telemetry is read from eight CAN identifiers via an MCP2515 controller and TJA1050
+                transceiver on the OBD-II port. An Arduino Uno decodes this into a fixed 15-byte UART record streamed
+                to the Jetson Nano; the CAN path is receive-only and transmits no vehicle-control commands. End-to-end
+                acquisition-to-display latency is approximately <strong>2.3 ms</strong> per cycle:
+              </p>
+              <table class="data-table">
+                <thead>
+                  <tr><th>No.</th><th>State</th><th>CAN ID</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td>1</td><td>Motor speed (RPM)</td><td>0x19F</td></tr>
+                  <tr><td>2</td><td>Vehicle speed</td><td>0x19F</td></tr>
+                  <tr><td>3</td><td>Odometer</td><td>0x599</td></tr>
+                  <tr><td>4</td><td>Motor temperature</td><td>0x196</td></tr>
+                  <tr><td>5</td><td>Gear</td><td>0x59B</td></tr>
+                  <tr><td>6</td><td>Battery voltage</td><td>0x55F</td></tr>
+                  <tr><td>7</td><td>Vehicle status</td><td>0x425</td></tr>
+                  <tr><td>8</td><td>State of charge</td><td>0x155</td></tr>
+                  <tr><td>9</td><td>Battery temperature</td><td>0x424</td></tr>
+                  <tr><td>10</td><td>Motor status</td><td>0x59B</td></tr>
+                  <tr><td>11</td><td>Throttle position</td><td>0x59B</td></tr>
+                  <tr><td>12</td><td>Required current</td><td>0x155</td></tr>
+                  <tr><td>13</td><td>State of health</td><td>0x424</td></tr>
+                  <tr><td>14</td><td>Brake status</td><td>0x59B</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- DATASET -->
+    <section id="dataset" class="section">
+      <div class="container">
+        <h2>🗂️ Dataset</h2>
+        <p class="figure-note" style="margin-left:0; margin-right:0;">
+          The dataset contains <strong>27,000</strong> original images: <strong>15,000</strong> generated with the
+          CARLA simulator, <strong>10,000</strong> generated with a Unity-based simulation environment, and
+          <strong>2,000</strong> captured with the scale-model vehicle. After an initial 21,000 / 6,000 train/test
+          split, data augmentation was applied exclusively to the training set (+3,000 samples), yielding a final
+          <strong>24,000</strong> training and <strong>6,000</strong> test images.
+        </p>
+
+        <div class="stat-row">
+          <div class="stat-pill"><div class="num">27,000</div><div class="lbl">Original images</div></div>
+          <div class="stat-pill"><div class="num">15,000</div><div class="lbl">CARLA</div></div>
+          <div class="stat-pill"><div class="num">10,000</div><div class="lbl">Unity</div></div>
+          <div class="stat-pill"><div class="num">2,000</div><div class="lbl">Scale-model vehicle</div></div>
+          <div class="stat-pill"><div class="num">24,000 / 6,000</div><div class="lbl">Final train / test split</div></div>
+        </div>
+
+        <div class="row" style="margin-top:14px;">
+          <div class="col-12">
+            <div class="fig">
+              <h3 style="margin-left:20px;">🌐 Dataset Sources</h3>
+              <p class="figure-note">
+                Training data is aggregated from four complementary sources: <strong>(a)</strong> the CARLA simulator,
+                <strong>(b)</strong> the Unity-based simulation environment, <strong>(c)</strong> the camera on the
+                scale-model vehicle, and <strong>(d)</strong> photometric and geometric data augmentation applied to
+                the training set.
+              </p>
+              <img src="images/dataset_sources.png" alt="Four dataset sources: CARLA, Unity simulation, scale-model camera, and data augmentation"
+                style="display:block; margin:0 auto; max-width:90%; height:auto;">
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PROGRESSIVE VALIDATION -->
+    <section id="validation" class="section">
+      <div class="container">
+        <h2>🚗 Progressive Validation</h2>
+        <p class="figure-note" style="margin-left:0; margin-right:0;">
+          The system is validated progressively across three stages of increasing realism: first the multi-task
+          visual model is evaluated in a <strong>Unity simulation</strong> under controlled conditions; it is then
+          tested on a <strong>scale-model vehicle</strong>, which introduces physical camera effects, lighting
+          variation, and real motion; finally, the external-visual, LiDAR, and CAN pipelines run together on a
+          <strong>real-world electric car</strong> (Renault Twizy) for passive data acquisition, without transmitting
+          any vehicle-control commands.
+        </p>
+
+        <div class="pv-carousel">
+          <div class="pv-viewport">
+            <div class="pv-track" id="pvTrack">
+              <div class="pv-slide">
+                <div class="fig">
+                  <video loop muted playsinline controls>
+                    <source src="videos/sim.mp4" type="video/mp4">
+                  </video>
+                  <div class="cap-title">1. Unity Simulation</div>
+                  <div class="cap-text">The multi-task visual model is first validated in a Unity simulation environment under controlled conditions.</div>
+                </div>
+              </div>
+              <div class="pv-slide">
+                <div class="fig">
+                  <video loop muted playsinline controls>
+                    <source src="videos/scale.mp4" type="video/mp4">
+                  </video>
+                  <div class="cap-title">2. Scale-Model Vehicle</div>
+                  <div class="cap-text">The model is then deployed on a physical scale-model vehicle, introducing real camera and lighting effects.</div>
+                </div>
+              </div>
+              <div class="pv-slide">
+                <div class="fig">
+                  <video loop muted playsinline controls>
+                    <source src="videos/real.mp4" type="video/mp4">
+                  </video>
+                  <div class="cap-title">3. Real-World Deployment</div>
+                  <div class="cap-text">Finally, the complete tri-modal system runs on a real electric car (Renault Twizy) with an onboard Jetson Nano.</div>
+                </div>
+              </div>
+              <div class="pv-slide">
+                <div class="fig">
+                  <video loop muted playsinline controls>
+                    <source src="videos/video.mp4" type="video/mp4">
+                  </video>
+                  <div class="cap-title">Supplementary Demo Video</div>
+                  <div class="cap-text">Additional overview footage of the system in action.</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <button class="pv-arrow pv-arrow-prev" type="button" aria-label="Previous video">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"></polyline></svg>
+          </button>
+          <button class="pv-arrow pv-arrow-next" type="button" aria-label="Next video">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"></polyline></svg>
+          </button>
+          <div class="pv-dots" id="pvDots"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- RESULTS -->
+    <section id="results" class="section">
+      <div class="container">
+        <h2>🧪 Results</h2>
+
+        <div class="row">
+          <div class="col-12">
+            <div class="card">
+              <h3 style="margin-left:10px;">📈 Lane Detection (on Jetson Nano)</h3>
+              <table class="data-table">
+                <thead>
+                  <tr><th>Model</th><th>IoU (%)</th><th>FPS</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td>U-Net</td><td>94.8</td><td>Failed</td></tr>
+                  <tr><td>BiSeNet</td><td>92.1</td><td>6.40</td></tr>
+                  <tr><td>ENet</td><td>90.2</td><td>12.20</td></tr>
+                  <tr class="highlight-row"><td>Ours</td><td>95.0</td><td>14.63</td></tr>
+                </tbody>
+              </table>
+              <p class="table-note">"Failed" indicates an inference runtime failure on the Jetson Nano.</p>
+            </div>
+          </div>
+
+          <div class="col-12">
+            <div class="card">
+              <h3 style="margin-left:10px;">📈 Object Detection (on Jetson Nano)</h3>
+              <table class="data-table">
+                <thead>
+                  <tr><th>Model</th><th>mAP@0.5 (%)</th><th>FPS</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td>YOLOv5m</td><td>86.1</td><td>3.80</td></tr>
+                  <tr><td>YOLOv6n</td><td>85.6</td><td>10.50</td></tr>
+                  <tr><td>YOLOv7</td><td>88.4</td><td>5.20</td></tr>
+                  <tr class="highlight-row"><td>Ours</td><td>88.1</td><td>14.63</td></tr>
+                </tbody>
+              </table>
+              <p class="table-note">FPS values were measured on the Jetson Nano. Ours jointly performs lane perception, object detection, and scene classification in a single forward pass.</p>
+            </div>
+          </div>
+
+          <div class="col-12">
+            <div class="fig">
+              <h3 style="margin-left:20px;">✨ LiDAR Complements Vision</h3>
+              <p class="figure-note">
+                A qualitative example tied to the object-detection results above: the LiDAR scan independently
+                registers a pedestrian and a car as distinct point clusters even where the camera-based detector's
+                output is limited — retaining evidence of obstacle presence and distance that the visual detector
+                alone can miss (though not the object's semantic class).
+              </p>
+              <img src="images/lidar_complement.png" alt="Camera detections of a pedestrian and a car alongside the corresponding Cartesian LiDAR point clusters"
+                style="display:block; margin:0 auto; max-width:90%; height:auto;">
+            </div>
+          </div>
+
+          <div class="col-12">
+            <div class="card">
+              <h3 style="margin-left:10px;">📈 System-Level Task-Configuration Ablation</h3>
+              <table class="data-table">
+                <thead>
+                  <tr><th>Configuration</th><th>mAP@0.5 (%)</th><th>IoU (%)</th><th>FPS</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td>YOLOv7 (detection only)</td><td>88.4</td><td>–</td><td>5.20</td></tr>
+                  <tr><td>U-Net (lane only)</td><td>–</td><td>94.8</td><td>Failed</td></tr>
+                  <tr><td>YOLOv7 + U-Net</td><td>88.4</td><td>94.8</td><td>Failed</td></tr>
+                  <tr class="highlight-row"><td>Ours (all tasks)</td><td>88.1</td><td>95.0</td><td>14.63</td></tr>
+                </tbody>
+              </table>
+              <p class="table-note">Accuracy and onboard throughput of single-task baselines, their separate-network combination, and the shared multi-task model. For YOLOv7 + U-Net, accuracy is inherited from the independently evaluated single-task networks.</p>
+            </div>
+          </div>
+
+          <div class="col-12">
+            <div class="card">
+              <h3 style="margin-left:10px;">🖼️ Qualitative Results on Real-World Driving</h3>
+              <p class="figure-note">
+                Representative outputs when evaluating the deployed model on real dashcam-style footage — object
+                detection, lane points, and scene classification remain consistent across varied highway and
+                residential scenes.
+              </p>
+              <img src="images/results_real_grid.png" alt="Four qualitative results of the multi-task model on real-world driving footage"
+                style="display:block; margin:0 auto; max-width:95%; height:auto;">
+            </div>
+          </div>
+
+          <div class="col-12">
+            <div class="fig">
+              <h3 style="margin-left:20px;">🌧️ Robustness to Adverse Conditions</h3>
+              <p class="figure-note">
+                The model was also tested under challenging weather and lighting conditions — rain, night, dawn/dusk,
+                and dense traffic — and continues to produce reasonable detection and lane-estimation results outside
+                of clear daylight scenes.
+              </p>
+              <img src="images/adverse_conditions.png" alt="Model predictions under adverse conditions: rain, night, dawn/dusk, and crowded traffic"
+                style="display:block; margin:0 auto; max-width:80%; height:auto;">
+            </div>
+          </div>
+
+          <div class="col-12">
+            <div class="fig">
+              <h3 style="margin-left:20px;">🚦 Tri-Modal System Evaluation</h3>
+              <p class="figure-note">
+                A web dashboard consolidates the three perception streams for monitoring during the Renault Twizy
+                experiment. The left panel shows CAN-derived vehicle, motor, and battery states; the upper-right panel
+                shows object detections, lane overlays, and scene predictions; and the lower-right panel visualizes
+                LiDAR measurements and vehicle-speed history.
+              </p>
+              <img src="images/dashboard.png" alt="Tri-modal monitoring dashboard showing vehicle state, visual detections, and LiDAR/speed plots"
+                style="display:block; margin:0 auto; max-width:90%; height:auto;">
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- HARDWARE -->
+    <section id="hardware" class="section">
+      <div class="container">
+        <h2>🔩 Hardware</h2>
+
+        <div class="row">
+          <div class="col-12">
+            <div class="two-col-imgs">
+              <div class="fig">
+                <h3 style="margin-left:20px;">🖥️ Onboard Hardware Configuration</h3>
+                <img src="images/hardware_diagram.png" alt="Block diagram of the onboard tri-modal perception hardware" style="height:320px; width:100%; object-fit:contain; background:#fff;">
+              </div>
+              <div class="fig">
+                <h3 style="margin-left:20px;">📐 Physical Layout</h3>
+                <img src="images/hardware_layout.png" alt="Physical layout photo of the onboard hardware unit, labeled by component" style="height:320px; width:100%; object-fit:contain; background:#fff;">
+              </div>
+            </div>
+            <p class="figure-note" style="margin-top:10px;">
+              The camera connects to the Jetson Nano via USB, the LMS511-PRO LiDAR via RS-232, and the Renault Twizy
+              CAN bus through an MCP2515-based interface. A three-cell 11.1&nbsp;V LiPo battery supplies the system; an
+              8-A UBEC generates 5&nbsp;V for the Jetson Nano and interfaces, while a DC–DC booster generates 24&nbsp;V
+              for the LiDAR. These components are packaged into a compact black-box unit for onboard perception and
+              telemetry, without transmitting any vehicle-control commands.
+            </p>
+          </div>
+
+          <div class="col-12">
+            <div class="fig">
+              <h3 style="margin-left:20px;">⚙️ System Integration &amp; Per-Component Latency</h3>
+              <p class="figure-note">
+                End-to-end data flow across the camera, LiDAR, and CAN-bus pipelines into the Jetson Nano, with the
+                web client / dashboard consuming the fused output. Per-component processing latency is shown at each
+                Jetson Nano input: <strong>0.068 s</strong> for the deep learning model inference, <strong>0.055 s</strong>
+                for the LiDAR pipeline, <strong>0.0023 s</strong> for the CAN-bus pipeline, and <strong>~0 s</strong>
+                for the web client request/response.
+              </p>
+              <img src="images/compute_cost.png" alt="System integration diagram showing camera, LiDAR, and CAN-bus data flow into the Jetson Nano with per-component processing latency and the web client dashboard"
+                style="display:block; margin:0 auto; max-width:95%; height:auto;">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CITATION (commented out until the paper is officially published / venue confirmed)
+    <section id="citation" class="section">
+      <div class="container">
+        <h2>📖 Citation</h2>
+        <div class="card">
+          <p style="margin:4px 10px 10px;">If you find this work useful, please consider citing:</p>
+          <div class="bibtex-block"><code>@inproceedings{dotran2026edgemultitask,
+  title     = {An Edge-Based Multi-Task System with Tri-Modal Perception for Autonomous Driving},
+  author    = {Do-Tran, Nhat-Tuong and Do, Du and Ngo, Ba Hung and Tran, Vu-Hoang and Nguyen, Trung-Hieu},
+  booktitle = {[Venue TBD]},
+  year      = {2026}
+}</code></div>
+        </div>
+      </div>
+    </section>
+    -->
+
+    <!-- ACKNOWLEDGMENT -->
+    <section id="acknowledgment" class="section">
+      <div class="container">
+        <h2>💌 Acknowledgment</h2>
+        <div class="card">
+          <div style="font-size: 1.05rem; line-height: 1.7; margin: 0; text-align: justify; text-justify: inter-word;">
+            This project would not have taken its shape without the patient guidance of our advisors,
+            <strong>Dr. Vu-Hoang Tran</strong> and <strong>M.Sc. Trung-Hieu Nguyen</strong> — from the earliest
+            late-night debugging sessions to the final tests on the Renault Twizy, their encouragement and sharp
+            feedback carried this work through every setback along the way. We are also sincerely grateful to
+            everyone at
+            <a href="https://en.hcmute.edu.vn/" target="_blank" rel="noopener">Ho Chi Minh City University of Technology and Engineering (HCMUTE)</a>
+            who opened up the workshop, the vehicle, and their time so this system could be built, tested, and
+            driven in the real world.
+            <p style="color:#0f766e; font-weight:600; margin-top:10px;">
+              🌟 With heartfelt thanks — Cảm ơn Thầy Cô rất nhiều!
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script src="assets/js/main.js"></script>
+</body>
+</html>
