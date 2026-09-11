@@ -124,7 +124,7 @@ a:hover { text-decoration:underline }
 }
 .fig img { width:100%; display:block }
 
-.caption { font-size:18px; color:black; margin-top:1px;  margin-bottom:2px; text-align:left; text-wrap:pretty }
+.caption { font-size:14.5px; color:#4b5563; line-height:1.55; margin-top:1px;  margin-bottom:2px; text-align:left; text-wrap:pretty }
 
 .gallery {
   display:grid;
@@ -269,7 +269,9 @@ h2,h3,h4 { margin-top:12px; margin-bottom:6px; margin-left:10px }
 .figure-note {
   text-align: justify;
   text-justify: inter-word;
-  font-size: 18px;
+  font-size: 14.5px;
+  line-height: 1.55;
+  color: #4b5563;
   margin: 0 20px 10px 20px;
 }
 
