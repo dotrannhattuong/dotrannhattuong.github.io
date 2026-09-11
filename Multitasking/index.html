@@ -257,54 +257,47 @@
           any vehicle-control commands.
         </p>
 
-        <div class="pv-carousel">
-          <div class="pv-viewport">
-            <div class="pv-track" id="pvTrack">
-              <div class="pv-slide">
-                <div class="fig">
-                  <video loop muted playsinline controls>
-                    <source src="videos/sim.mp4" type="video/mp4">
-                  </video>
-                  <div class="cap-title">1. Unity Simulation</div>
-                  <div class="cap-text">The multi-task visual model is first validated in a Unity simulation environment under controlled conditions.</div>
-                </div>
+        <div class="video-tabs">
+          <div class="tab-buttons">
+            <button class="tab-btn" data-target="tab-sim" type="button">1. Unity Simulation</button>
+            <button class="tab-btn" data-target="tab-scale" type="button">2. Scale-Model Vehicle</button>
+            <button class="tab-btn active" data-target="tab-real" type="button">3. Real-World Deployment</button>
+            <button class="tab-btn" data-target="tab-demo" type="button">Supplementary Demo Video</button>
+          </div>
+          <div class="tab-panels">
+            <div class="tab-panel" id="tab-sim" hidden>
+              <div class="fig">
+                <video loop muted playsinline controls>
+                  <source src="videos/sim.mp4" type="video/mp4">
+                </video>
+                <div class="cap-text">The multi-task visual model is first validated in a Unity simulation environment under controlled conditions.</div>
               </div>
-              <div class="pv-slide">
-                <div class="fig">
-                  <video loop muted playsinline controls>
-                    <source src="videos/scale.mp4" type="video/mp4">
-                  </video>
-                  <div class="cap-title">2. Scale-Model Vehicle</div>
-                  <div class="cap-text">The model is then deployed on a physical scale-model vehicle, introducing real camera and lighting effects.</div>
-                </div>
+            </div>
+            <div class="tab-panel" id="tab-scale" hidden>
+              <div class="fig">
+                <video loop muted playsinline controls>
+                  <source src="videos/scale.mp4" type="video/mp4">
+                </video>
+                <div class="cap-text">The model is then deployed on a physical scale-model vehicle, introducing real camera and lighting effects.</div>
               </div>
-              <div class="pv-slide">
-                <div class="fig">
-                  <video loop muted playsinline controls>
-                    <source src="videos/real.mp4" type="video/mp4">
-                  </video>
-                  <div class="cap-title">3. Real-World Deployment</div>
-                  <div class="cap-text">Finally, the complete tri-modal system runs on a real electric car (Renault Twizy) with an onboard Jetson Nano.</div>
-                </div>
+            </div>
+            <div class="tab-panel" id="tab-real">
+              <div class="fig">
+                <video autoplay loop muted playsinline controls>
+                  <source src="videos/real.mp4" type="video/mp4">
+                </video>
+                <div class="cap-text">Finally, the complete tri-modal system runs on a real electric car (Renault Twizy) with an onboard Jetson Nano.</div>
               </div>
-              <div class="pv-slide">
-                <div class="fig">
-                  <video loop muted playsinline controls>
-                    <source src="videos/video.mp4" type="video/mp4">
-                  </video>
-                  <div class="cap-title">Supplementary Demo Video</div>
-                  <div class="cap-text">Additional overview footage of the system in action.</div>
-                </div>
+            </div>
+            <div class="tab-panel" id="tab-demo" hidden>
+              <div class="fig">
+                <video loop muted playsinline controls>
+                  <source src="videos/video.mp4" type="video/mp4">
+                </video>
+                <div class="cap-text">Additional overview footage of the system in action.</div>
               </div>
             </div>
           </div>
-          <button class="pv-arrow pv-arrow-prev" type="button" aria-label="Previous video">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"></polyline></svg>
-          </button>
-          <button class="pv-arrow pv-arrow-next" type="button" aria-label="Next video">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"></polyline></svg>
-          </button>
-          <div class="pv-dots" id="pvDots"></div>
         </div>
       </div>
     </section>

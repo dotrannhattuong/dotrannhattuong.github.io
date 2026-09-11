@@ -307,78 +307,36 @@ h2,h3,h4 { margin-top:12px; margin-bottom:6px; margin-left:10px }
 .video-grid .cap-title { text-align:center; font-size:16px; font-weight:700; margin:8px 0 2px }
 .video-grid .cap-text { text-align:center; font-size:14px; color:var(--muted); margin:0 10px 6px }
 
-.pv-carousel {
-  position: relative;
-  max-width: 1100px;
-  margin: 22px auto 0;
-  padding: 0 44px;
+.video-tabs { margin-top: 18px; }
+.tab-buttons {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-bottom: 16px;
 }
-.pv-viewport {
-  overflow: hidden;
+.tab-btn {
+  padding: 10px 18px;
   border: 1px solid var(--stroke);
-  border-radius: 14px;
-  box-shadow: var(--shadow);
-}
-.pv-track {
-  display: flex;
-  transition: transform .45s cubic-bezier(.4,0,.2,1);
-}
-.pv-slide {
-  flex: 0 0 100%;
-  min-width: 0;
-}
-.pv-slide .fig {
-  border: none;
-  border-radius: 0;
-  box-shadow: none;
-  margin: 0;
-  padding-bottom: 10px;
-}
-.pv-slide .cap-title { text-align: center; font-size: 16px; font-weight: 700; margin: 10px 0 2px }
-.pv-slide .cap-text { text-align: center; font-size: 14px; color: var(--muted); margin: 0 14px 4px }
-
-.pv-arrow {
-  position: absolute;
-  top: 0;
-  bottom: 34px;
-  width: 40px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: none;
-  border: none;
-  color: var(--muted);
+  border-radius: 10px;
+  background: #fff;
+  color: var(--text);
+  font-weight: 600;
+  font-family: inherit;
+  font-size: 15px;
   cursor: pointer;
-  transition: color .2s;
+  transition: background .2s, color .2s, border-color .2s;
 }
-.pv-arrow:hover { color: var(--brand); }
-.pv-arrow-prev { left: 0; }
-.pv-arrow-next { right: 0; }
-
-.pv-dots {
-  display: flex;
-  justify-content: center;
-  gap: 7px;
-  margin-top: 14px;
-}
-.pv-dot {
-  width: 8px;
-  height: 8px;
-  border-radius: 999px;
-  background: var(--stroke);
-  border: none;
-  padding: 0;
-  cursor: pointer;
-  transition: background .2s, width .2s;
-}
-.pv-dot.active {
+.tab-btn:hover { background: #f8fafc; }
+.tab-btn.active {
   background: var(--brand);
-  width: 20px;
+  color: #fff;
+  border-color: transparent;
 }
-@media (max-width: 600px) {
-  .pv-carousel { padding: 0 32px; }
-  .pv-arrow { width: 30px; }
-}
+.tab-panels { max-width: 1100px; margin: 0 auto; }
+.tab-panel[hidden] { display: none; }
+.tab-panel .fig { padding-bottom: 10px; }
+.tab-panel .cap-text { text-align: center; font-size: 14px; color: var(--muted); margin: 8px 12px 4px; }
 
 .hero-video-row {
   display: flex;

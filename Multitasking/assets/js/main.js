@@ -7,41 +7,23 @@ document.querySelectorAll('a[href^="#"]').forEach(a=>{
   });
 });
 
-// Progressive Validation carousel
-(function(){
-  const track = document.getElementById('pvTrack');
-  const dotsWrap = document.getElementById('pvDots');
-  if(!track || !dotsWrap) return;
+// Video tab switcher (Progressive Validation section)
+document.querySelectorAll('.tab-btn').forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    const targetId = btn.dataset.target;
 
-  const slides = Array.from(track.children);
-  let current = Math.min(2, slides.length - 1); // default: 3. Real-World Deployment
+    document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
 
-  slides.forEach((_, i)=>{
-    const dot = document.createElement('button');
-    dot.type = 'button';
-    dot.className = 'pv-dot';
-    dot.setAttribute('aria-label', 'Show video ' + (i + 1));
-    dot.addEventListener('click', ()=>show(i));
-    dotsWrap.appendChild(dot);
-  });
-  const dots = Array.from(dotsWrap.children);
-
-  function show(i){
-    current = (i + slides.length) % slides.length;
-    track.style.transform = 'translateX(-' + (current * 100) + '%)';
-    dots.forEach((d, j)=>d.classList.toggle('active', j === current));
-    slides.forEach((slide, j)=>{
-      const video = slide.querySelector('video');
-      if(!video) return;
-      if(j === current){ video.play().catch(()=>{}); }
-      else { video.pause(); }
+    document.querySelectorAll('.tab-panel').forEach(panel=>{
+      const video = panel.querySelector('video');
+      if(panel.id === targetId){
+        panel.hidden = false;
+        if(video){ video.currentTime = 0; video.play().catch(()=>{}); }
+      } else {
+        panel.hidden = true;
+        if(video){ video.pause(); }
+      }
     });
-  }
-
-  const prevBtn = document.querySelector('.pv-arrow-prev');
-  const nextBtn = document.querySelector('.pv-arrow-next');
-  if(prevBtn) prevBtn.addEventListener('click', ()=>show(current - 1));
-  if(nextBtn) nextBtn.addEventListener('click', ()=>show(current + 1));
-
-  show(current);
-})();
+  });
+});
