@@ -124,7 +124,7 @@ a:hover { text-decoration:underline }
 }
 .fig img { width:100%; display:block }
 
-.caption { font-size:18px; color:black; margin-top:1px;  margin-bottom:2px; text-align:left }
+.caption { font-size:18px; color:black; margin-top:1px;  margin-bottom:2px; text-align:left; text-wrap:pretty }
 
 .gallery {
   display:grid;
@@ -192,7 +192,7 @@ kbd {
 }
 
 /* Abstract paragraph justification */
-#abstract p { text-align:justify; text-justify:inter-word; hyphens:auto }
+#abstract p { text-align:justify; text-justify:inter-word; hyphens:auto; font-style:italic }
 
 /* Titles & headings */
 h1 { font-weight:800 }

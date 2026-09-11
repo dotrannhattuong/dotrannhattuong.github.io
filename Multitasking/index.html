@@ -99,11 +99,10 @@
           alt="Overview of the tri-modal perception system: camera, 2D LiDAR, and CAN bus feeding four perception outputs"
           style="margin-top:10px; max-width:85%; height:auto; display:block; margin-left:auto; margin-right:auto;">
         <p class="caption" style="text-align:justify; text-justify:inter-word; margin:8px 20px 0;">
-          <strong>Left:</strong> the camera captures external-visual information, a SICK LMS511-PRO 2D LiDAR provides
-          obstacle-distance measurements, and the CAN bus provides internal-vehicle information. <strong>Center:</strong>
-          the multi-task visual network, LiDAR pipeline, and CAN bus pipeline process these streams concurrently on the
-          Jetson Nano. <strong>Right:</strong> the system outputs lane segmentation, driving-scene classification, object
-          detection complemented by LiDAR obstacle distances, and vehicle-state data.
+          <strong>Left:</strong> camera, 2D LiDAR, and CAN bus capture visual, spatial, and vehicle data.
+          <strong>Center:</strong> three pipelines process these concurrently on the Jetson Nano.
+          <strong>Right:</strong> outputs are lane segmentation, scene classification, LiDAR-complemented
+          object detection, and vehicle state.
         </p>
       </div>
     </div>
